@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Arkanoid Game</title>
+    <style type="text/css">
+    	canvas { background-color: #33CCFF ;
+				 border: 5px solid #A80000  ; 		
+			   }
+    </style>
+</head>
+<body>
+
+<canvas id="my-arkanoid" width="700" height="450"></canvas>
+<script>
+      //VARIABLES  
+      // Gets a handle to the element with id canvas-psycho.
+      var canvas = document.getElementById("my-arkanoid");
+      // Get a 2D context for the canvas.
+      var ctx = canvas.getContext("2d");
+      // var that defines position of x,y of the ball object on canvas. lecture notes javascript                    refresher and animation
+      var y = canvas.height-30;
+      var x = canvas.width/2;
+      // update location of the ball, ball movement will be visible everytime setInterval is invoked
+      var dx = 3;
+      var dy = -2;
+      // radius
+      var r = 9;
+
+      // ball object that appears on canvas
+      function ball(){
+        ctx.beginPath();
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle = "#CCFF00";
+        ctx.fill();
+        ctx.closePath();
+      }
+    
+      // function that draws circle on canvas    
+      function draw(){
+        // this line of code clear canvas before each frame, in this case it's 5ms because thats a value            set in setInterval function.   
+        ctx.clearRect(0,0, canvas.width, canvas.height);  
+        ball();  
+        
+        //if statement that makes ball bouncing from sides of the canvas. Lecture note on animation
+        if(x + dx > canvas.width- r || x + dx < r) {
+            dx = -dx;
+        }
+        if(y + dy > canvas.height- r || y + dy < r) {
+            dy = -dy;
+        }
+        // update ball on the canvas
+        x += dx;
+        y += dy;
+      }
+      //this line of code will call draw function every 5/10/15/20ms
+      setInterval(draw, 5); 
+      
+      
+    
+    
+    
+</script>
+
+</body>
+</html>

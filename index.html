@@ -48,7 +48,7 @@
       document.addEventListener("keyup", keyUpHandler, false);
     
     
-    // event handler function that allows to move paddle from left to right using left and right arrow          on keyboard  <,>.            
+    // event handler function that allows to move paddle from left to right using left and right arrow on keyboard  <,>.            
       function keyDownHandler(e) {
         if(e.keyCode == 39) {
             pressRight = true;
@@ -133,14 +133,14 @@
     
       // function that draws circle on canvas    
       function drawGame(){
-        // this line of code clear canvas before each frame, in this case it's 5ms because thats a value            set in setInterval function.   
+        // this line of code clear canvas before each frame, in this case it's 5ms because thats a value set in setInterval function.   
         ctx.clearRect(0,0, canvas.width, canvas.height);  
         printBall();
         printPaddle();
         printTiles();
         collisionDetection();  
         
-        //if statement that makes ball bouncing from paddle and  sides of the canvas. Lecture note on                animation + 
+        //if statement that makes ball bouncing from paddle and  sides of the canvas. Lecture note on animation + 
         if(x + dx > canvas.width- r || x + dx < r) {
             dx = -dx;
         }
@@ -160,7 +160,7 @@
           
           
           
-        // if statement for paddle and event listeners. when left or right arrow will be pressed paddle               will move by 5px and it will stop when it touches side of the canvas
+        // if statement for paddle and event listeners. when left or right arrow will be pressed paddle will move by 5px and it will stop when it touches side of the canvas
         if(pressRight && padX < canvas.width - padWgh) {
             padX += 5;
         }

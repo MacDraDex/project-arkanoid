@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Arkanoid Game</title>
+    <title>Arkanoid Game G00277045</title>
     <style type="text/css">
-    	canvas { background-color: #33CCFF ;
-				 border: 5px solid #A80000  ; 		
+        canvas { background-color: #A80000 ;
+				 border: 5px solid #CC9900  ; 		
 			   }
+    	
     </style>
 </head>
 <body>
@@ -18,44 +19,161 @@
       var canvas = document.getElementById("my-arkanoid");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
-      // var that defines position of x,y of the ball object on canvas. lecture notes javascript                    refresher and animation
+      // var that defines position of x,y of the ball object on canvas. lecture notes javascript                  refresher and animation
       var y = canvas.height-30;
       var x = canvas.width/2;
+      // variables h,w and x starting coords for paddle that hits the ball back
+      var padHt = 10;
+      var padWgh = 80;
+      var padX = (canvas.width - padWgh)/2;
       // update location of the ball, ball movement will be visible everytime setInterval is invoked
       var dx = 3;
       var dy = -2;
       // radius
       var r = 9;
-
+      // user interaction controllers left and right arrows. At the start value will be false because              buttons are not pressed yet.
+      var pressLeft = false;
+      var pressRight = false;
+      // variables for TILES + var 2 dimensional array of tiles
+      var tileColNo = 12;
+      var tileRowNo = 10;
+      var tileHt = 15;
+      var tileWgh = 50;
+      // padding + offsets
+      var tilePad = 5;
+      var tileOffsetTop = 30;
+      var tileOffsetLeft = 30;
+    
+      document.addEventListener("keydown", keyDownHandler, false);
+      document.addEventListener("keyup", keyUpHandler, false);
+    
+    
+    // event handler function that allows to move paddle from left to right using left and right arrow          on keyboard  <,>.            
+      function keyDownHandler(e) {
+        if(e.keyCode == 39) {
+            pressRight = true;
+        }else if(e.keyCode == 37) {
+            pressLeft = true;
+        }
+      }
+      function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            pressRight = false;
+        }else if(e.keyCode == 37) {
+            pressLeft = false;
+        }
+      }
+     
+      // multidimensional array that stores data for rows and columns.
+      var tiles = [];
+      for(col = 0; col < tileColNo; col++){
+          tiles[col] = [];
+          for(row = 0; row < tileRowNo; row++){
+              tiles[col][row] = {x:0, y: 0, track:1};
+          }
+          
+      }    
+      
       // ball object that appears on canvas
-      function ball(){
-        ctx.beginPath();
+      function printBall(){
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI*2);
         ctx.fillStyle = "#CCFF00";
         ctx.fill();
+        ctx.stroke();
         ctx.closePath();
       }
+      // draw tiles
+      function printTiles(){
+          for(col = 0; col<tileColNo; col++){
+              for(row = 0; row<tileRowNo; row++){
+                  if(tiles[col][row].track ==1){
+                    // tile coords
+                    var tileX = (col*(tileWgh+tilePad)) + tileOffsetLeft;
+                    var tileY = (row*(tileHt+tilePad)) + tileOffsetTop;
+
+                    tiles[col][row].x = tileX;
+                    tiles[col][row].y = tileY;
+                    //draw tiles on the canvas
+                    ctx.beginPath();
+                    ctx.rect(tileX, tileY, tileWgh, tileHt);
+                    ctx.fillStyle = "#66FF00";
+                    ctx.fill();
+                    ctx.closePath();  
+                    }
+                }
+            }//end of if
+        }// end of function printTiles
+      
+      // paddle 
+      function printPaddle(){
+        ctx.beginPath();
+        ctx.rect(padX, canvas.height - padHt, padWgh,padHt);
+        ctx.fillStyle = "#000000 ";
+        ctx.fill();
+        ctx.closePath();
+      }
+      
+      // to create logic and calculations for collision I used code from this video 
+      // https://www.youtube.com/watch?v=H25CeRHAf0g&index=3&list=PL1iPwzIyAqwYMdsKAsGb8C-5jesFDd2b4
+      function collisionDetection(){
+          for(col = 0; col < tileColNo; col++){
+              for(row = 0;row < tileRowNo; row++){
+                  var t = tiles[col][row];
+                  if(t.track == 1){
+                      if(x > t.x && x < t.x + tileWgh && y > t.y && y < t.y + tileHt ){
+                          dy = -dy;
+                          t.track = 0;
+                      }
+                  }
+              }
+          }
+      }
+      
     
       // function that draws circle on canvas    
-      function draw(){
+      function drawGame(){
         // this line of code clear canvas before each frame, in this case it's 5ms because thats a value            set in setInterval function.   
         ctx.clearRect(0,0, canvas.width, canvas.height);  
-        ball();  
+        printBall();
+        printPaddle();
+        printTiles();
+        collisionDetection();  
         
-        //if statement that makes ball bouncing from sides of the canvas. Lecture note on animation
+        //if statement that makes ball bouncing from paddle and  sides of the canvas. Lecture note on                animation + 
         if(x + dx > canvas.width- r || x + dx < r) {
             dx = -dx;
         }
-        if(y + dy > canvas.height- r || y + dy < r) {
+        //if(y + dy > canvas.height- r || y + dy < r) {
+        //   dy = -dy;
+        //}
+        if(y + dy < r){
             dy = -dy;
+        }else if (y +dy > canvas.height - r){
+            if(x > padX && x < padX + padWgh){
+                dy = -dy;
+            }else{
+                alert("The Game is over");
+                document.location.reload();
+            }
         }
+          
+          
+          
+        // if statement for paddle and event listeners. when left or right arrow will be pressed paddle               will move by 5px and it will stop when it touches side of the canvas
+        if(pressRight && padX < canvas.width - padWgh) {
+            padX += 5;
+        }
+        else if(pressLeft && padX > 0) {
+            padX -= 5;
+        }
+          
         // update ball on the canvas
         x += dx;
         y += dy;
       }
       //this line of code will call draw function every 5/10/15/20ms
-      setInterval(draw, 5); 
+      setInterval(drawGame, 15); 
       
       
     

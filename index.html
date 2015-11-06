@@ -19,7 +19,7 @@
       var canvas = document.getElementById("my-arkanoid");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
-      // var that defines position of x,y of the ball object on canvas. lecture notes javascript                  refresher and animation
+      // var that defines position of x,y of the ball object on canvas. lecture notes javascript refresher and animation
       var y = canvas.height-30;
       var x = canvas.width/2;
       // variables h,w and x starting coords for paddle that hits the ball back
@@ -31,10 +31,10 @@
       var dy = -2;
       // radius
       var r = 9;
-      // user interaction controllers left and right arrows. At the start value will be false because              buttons are not pressed yet.
+      // user interaction controllers left and right arrows. At the start value will be false because buttons are not pressed yet.
       var pressLeft = false;
       var pressRight = false;
-      // variables for TILES + var 2 dimensional array of tiles
+      // variables for TILES number of columns, number of rows, height,width 
       var tileColNo = 12;
       var tileRowNo = 10;
       var tileHt = 15;
@@ -175,11 +175,6 @@
       //this line of code will call draw function every 5/10/15/20ms
       setInterval(drawGame, 15); 
       
-      
-    
-    
-    
 </script>
-
 </body>
 </html>
